@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Diana Lima - Project Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-black: #0a0a0a;
+            --soft-black: #1a1a1a;
+            --charcoal: #2d2d2d;
+            --medium-grey: #666666;
+            --light-grey: #a3a3a3;
+            --off-white: #f8f8f8;
+            --pure-white: #ffffff;
+            --accent-grey: #e5e5e5;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: var(--primary-black);
+            background: var(--pure-white);
+            scroll-behavior: smooth;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--accent-grey);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-black);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--charcoal);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-black);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-black);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--off-white) 0%, var(--pure-white) 100%);
+            text-align: center;
+            padding: 0 2rem;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary-black);
+            letter-spacing: -2px;
+        }
+
+        .hero .subtitle {
+            font-size: 1.25rem;
+            color: var(--medium-grey);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-black);
+            color: var(--pure-white);
+        }
+
+        .btn-primary:hover {
+            background: var(--soft-black);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-black);
+            border: 2px solid var(--primary-black);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-black);
+            color: var(--pure-white);
+            transform: translateY(-2px);
+        }
+
+        /* Sections */
+        .section {
+            padding: 5rem 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary-black);
+            letter-spacing: -1px;
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .about-image {
+            width: 300px;
+            height: 300px;
+            border-radius: 20px;
+            background: var(--accent-grey);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: var(--medium-grey);
+            margin: 0 auto;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--charcoal);
+        }
+
+        /* Experience Cards */
+        .experience-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .experience-card {
+            background: var(--off-white);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            border: 1px solid var(--accent-grey);
+        }
+
+        .experience-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .experience-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-black);
+            border-bottom: 2px solid var(--accent-grey);
+            padding-bottom: 0.5rem;
+        }
+
+        .job-item {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--accent-grey);
+        }
+
+        .job-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .job-header {
+            margin-bottom: 1rem;
+        }
+
+        .job-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-black);
+            margin-bottom: 0.25rem;
+        }
+
+        .company-info {
+            color: var(--medium-grey);
+            font-weight: 500;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .job-description {
+            color: var(--charcoal);
+            line-height: 1.7;
+        }
+
+        .job-description ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .job-description li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Skills Section */
+        .skills-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .skill-category h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-black);
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .skill-tag {
+            background: var(--accent-grey);
+            color: var(--charcoal);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .skill-tag:hover {
+            background: var(--charcoal);
+            color: var(--pure-white);
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--pure-white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 1px solid var(--accent-grey);
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .project-image {
+            height: 200px;
+            background: linear-gradient(135deg, var(--accent-grey), var(--light-grey));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--medium-grey);
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-black);
+        }
+
+        .project-type {
+            color: var(--medium-grey);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        /* Certifications */
+        .certifications {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .cert-card {
+            background: var(--off-white);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid var(--accent-grey);
+            transition: all 0.3s ease;
+        }
+
+        .cert-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .cert-card h4 {
+            color: var(--primary-black);
+            margin-bottom: 0.5rem;
+        }
+
+        .cert-link {
+            color: var(--medium-grey);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .cert-link:hover {
+            color: var(--primary-black);
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .contact-info {
+            background: var(--off-white);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid var(--accent-grey);
+        }
+
+        .contact-item {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .contact-item span {
+            font-weight: 600;
+            color: var(--primary-black);
+        }
+
+        .contact-item a {
+            color: var(--medium-grey);
+            text-decoration: none;
+        }
+
+        .contact-item a:hover {
+            color: var(--primary-black);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .social-btn {
+            padding: 0.8rem 1.5rem;
+            background: var(--charcoal);
+            color: var(--pure-white);
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .social-btn:hover {
+            background: var(--primary-black);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--soft-black);
+            color: var(--light-grey);
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .about-content,
+            .skills-container,
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .section {
+                padding: 3rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo">Diana Lima</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Diana Lima</h1>
+            <p class="subtitle">Project Manager & Digital Strategist</p>
+            <div class="cta-buttons">
+                <a href="#about" class="btn btn-primary">Learn More</a>
+                <a href="Pinterest PM - Resume.pdf" class="btn btn-secondary" download>📄 Download Resume</a>
+                <a href="Cover Letter - Pinterest PM.pdf" class="btn btn-secondary" download>📋 Cover Letter</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <h2 class="section-title">About Me</h2>
+        <div class="about-content fade-in">
+            <div class="about-image">👤</div>
+            <div class="about-text">
+                <p>I'm a passionate project manager and digital strategist with a strong background in technology and business development. My experience spans across various industries, from managing complex digital projects to launching entrepreneurial ventures. I believe in creating meaningful solutions that bridge the gap between technology and human needs.</p>
+                <p>Currently, I'm preparing to launch Webvex, a web agency focused on delivering exceptional digital experiences. I'm also actively involved with the Society of Professional Hispanic Engineers, contributing to community development and professional growth initiatives.</p>
+            </div>
+        </div>
+
+        <!-- Experience -->
+        <div class="fade-in">
+            <h3 style="font-size: 2rem; margin-bottom: 2rem; text-align: center;">Experience</h3>
+            <div class="experience-grid">
+                <div class="experience-card">
+                    <h3>Professional Experience</h3>
+                    
+                    <div class="job-item">
+                        <div class="job-header">
+                            <div class="job-title">Founder & Web Strategist</div>
+                            <div class="company-info">Webvex Remote | Jan 2025 – Present</div>
+                        </div>
+                        <div class="job-description">
+                            <ul>
+                                <li>Building a digital agency focused on customer-first web solutions, with ongoing development of workflows, tools, and client-facing assets</li>
+                                <li>Leading all behind-the-scenes operations including CRM integration, service architecture, and process automation using HubSpot, Stripe, Mailchimp, Calendly, and Buffer</li>
+                                <li>Drafting client onboarding pipelines, support documentation, and knowledge base resources to prepare for seamless customer experiences</li>
+                                <li>Conducting market research and informal consultations to understand client needs and shape service offerings</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="job-item">
+                        <div class="job-header">
+                            <div class="job-title">ABA Therapist</div>
+                            <div class="company-info">Autism Learning Partners | Downey, CA | 2024</div>
+                        </div>
+                        <div class="job-description">
+                            <ul>
+                                <li>Used data tracking systems to monitor client progress and collaborated with cross-functional behavioral teams</li>
+                                <li>Provided ongoing parent training and support — developing strong communication and problem-solving skills applicable to customer success roles</li>
+                                <li>Ensured client satisfaction by adapting strategies and session planning for long-term growth</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="job-item">
+                        <div class="job-header">
+                            <div class="job-title">Sales Associate / Keyholder</div>
+                            <div class="company-info">Kate Spade / Club Pilates | Torrance, CA | 2020 – 2023</div>
+                        </div>
+                        <div class="job-description">
+                            <ul>
+                                <li>Delivered personalized service to high-volume clientele, strengthening brand loyalty</li>
+                                <li>Managed inventory systems, daily operations, and cross-functional communication as Keyholder</li>
+                                <li>Supported internal teams by maintaining organized records and driving sales through CRM tools and email outreach</li>
+                                <li>Created and maintained a system to streamline appointment scheduling and client follow-ups</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="experience-card">
+                    <h3>Community Involvement</h3>
+                    
+                    <div class="job-item">
+                        <div class="job-header">
+                            <div class="job-title">Volunteer</div>
+                            <div class="company-info">Midnight Mission - Los Angeles, CA</div>
+                        </div>
+                        <div class="job-description">
+                            <p>Contributing to community support through soup kitchen volunteer work, demonstrating commitment to social impact and community service.</p>
+                        </div>
+                    </div>
+
+                    <div class="job-item">
+                        <div class="job-header">
+                            <div class="job-title">Member</div>
+                            <div class="company-info">Society of Professional Hispanic Engineers (SHPE)</div>
+                        </div>
+                        <div class="job-description">
+                            <p>Active participation in professional development initiatives and community outreach programs focused on advancing Hispanic professionals in engineering and technology.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Education & Certifications -->
+        <div class="fade-in" style="margin-top: 3rem;">
+            <h3 style="font-size: 2rem; margin-bottom: 2rem; text-align: center;">Education & Certifications</h3>
+            <div class="certifications">
+                <div class="cert-card">
+                    <h4>Education</h4>
+                    <p style="color: var(--medium-grey); margin-top: 0.5rem;">Pasadena City College, AS Computer Science</p>
+                </div>
+                <div class="cert-card">
+                    <h4>Personalize How You Work in Jira</h4>
+                    <p style="color: var(--medium-grey); font-size: 0.85rem; margin: 0.5rem 0;">Atlassian University</p>
+                    <a href="personalize how you work in jira.pdf" class="cert-link" download>📄 View Certificate →</a>
+                </div>
+                <div class="cert-card">
+                    <h4>Track Your Work Effectively in Jira</h4>
+                    <p style="color: var(--medium-grey); font-size: 0.85rem; margin: 0.5rem 0;">Atlassian University</p>
+                    <a href="Track your work effectively in Jira.pdf" class="cert-link" download>📄 View Certificate →</a>
+                </div>
+                <div class="cert-card">
+                    <h4>Get Started Quickly with Jira</h4>
+                    <p style="color: var(--medium-grey); font-size: 0.85rem; margin: 0.5rem 0;">Atlassian University</p>
+                    <a href="get started quickly with Jira.pdf" class="cert-link" download>📄 View Certificate →</a>
+                </div>
+                <div class="cert-card">
+                    <h4>Additional Certifications</h4>
+                    <p style="color: var(--medium-grey); margin-top: 0.5rem;">Project Management & Digital Strategy</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section" style="background: var(--off-white);">
+        <h2 class="section-title">Skills</h2>
+        <div class="skills-container fade-in">
+            <div class="skill-category">
+                <h3>Technical Skills</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">Project Management</span>
+                    <span class="skill-tag">Jira</span>
+                    <span class="skill-tag">Agile/Scrum</span>
+                    <span class="skill-tag">Digital Strategy</span>
+                    <span class="skill-tag">Web Development</span>
+                    <span class="skill-tag">Data Analysis</span>
+                    <span class="skill-tag">Process Optimization</span>
+                </div>
+            </div>
+            <div class="skill-category">
+                <h3>Soft Skills</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">Leadership</span>
+                    <span class="skill-tag">Communication</span>
+                    <span class="skill-tag">Problem Solving</span>
+                    <span class="skill-tag">Team Collaboration</span>
+                    <span class="skill-tag">Strategic Thinking</span>
+                    <span class="skill-tag">Adaptability</span>
+                    <span class="skill-tag">Time Management</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="projects-grid fade-in">
+            <div class="project-card">
+                <div class="project-image">📌</div>
+                <div class="project-content">
+                    <h3>Pinterest Case Study</h3>
+                    <div class="project-type">Project Management Case Study</div>
+                    <p>Comprehensive analysis of project management strategies and methodologies applied to improve user engagement and platform efficiency.</p>
+                    <a href="pinterest.html">
+                        <button class="btn btn-secondary">View Case Study</button>
+                    </a>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-image">🌐</div>
+                <div class="project-content">
+                    <h3>Webvex Case Study</h3>
+                    <div class="project-type">Project Management Case Study</div>
+                    <p>Strategic project management approach for launching a digital web agency, including process optimization and team coordination.</p>
+                    <a href="webvex.html">
+                        <button class="btn btn-secondary">View Case Study</button>
+                    </a>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-image">🚀</div>
+                <div class="project-content">
+                    <h3>Webvex Web Agency</h3>
+                    <div class="project-type">Entrepreneurial Venture</div>
+                    <p>Pre-launch web agency focused on delivering exceptional digital experiences and innovative web solutions for businesses.</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-image">✍️</div>
+                <div class="project-content">
+                    <h3>The Digital Ethos</h3>
+                    <div class="project-type">Writing Publication</div>
+                    <p>Digital publication focused on technology trends and insights, now evolved into the Webvex blog platform.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section" style="background: var(--off-white);">
+        <h2 class="section-title">Get In Touch</h2>
+        <div class="contact-grid fade-in">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span>📧 Email:</span>
+                    <a href="mailto:diana.lima.o@outlook.com">diana.lima.o@outlook.com</a>
+                </div>
+                <div class="contact-item">
+                    <span>📱 Phone:</span>
+                    <a href="tel:+1-310-876-6173"> (310) 876-6173</a>
+                </div>
+                <div class="contact-item">
+                    <span>📍 Location:</span>
+                    <span> Los Angeles Metropolitan Area </span>
+                </div>
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/diana156/" class="social-btn" target="_blank">LinkedIn</a>
+                    <a href="https://www.pinterest.com/Webvexx/" class="social-btn" target="_blank">Pinterest</a>
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <h3 style="color: var(--primary-black);">Let's Connect</h3>
+                <p style="color: var(--charcoal); line-height: 1.6;">I'm always interested in discussing new opportunities, innovative projects, and potential collaborations. Whether you're looking for project management expertise or want to explore digital solutions, I'd love to hear from you.</p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <a href="Pinterest PM - Resume.pdf" class="btn btn-secondary" download>Download Resume</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Diana Lima. All rights reserved. Designed with passion and precision.</p>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Fade in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.boxShadow = 'none';
+            }
+        });
+
+        // Add subtle parallax effect to hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.3}px)`;
+            }
+        });
+
+        // Interactive skill tags
+        document.querySelectorAll('.skill-tag').forEach(tag => {
+            tag.addEventListener('click', () => {
+                tag.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    tag.style.transform = 'scale(1)';
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>

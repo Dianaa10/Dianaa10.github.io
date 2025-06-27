@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinterest PM Case Study</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: black;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .presentation-container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .slide {
+            display: none;
+            padding: 60px;
+            min-height: 600px;
+            position: relative;
+            background: white;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        .slide h1 {
+            color: #e60023;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .slide h2 {
+            color: #e60023;
+            font-size: 2em;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #e60023;
+            padding-bottom: 10px;
+        }
+
+        .slide h3 {
+            color: #333;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+        }
+
+        .pinterest-logo {
+            text-align: center;
+            font-size: 3em;
+            color: #e60023;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .project-overview {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .metric-card h3 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #e60023;
+            z-index: 1;
+        }
+
+        .timeline-item {
+            background: white;
+            border: 3px solid #e60023;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            z-index: 2;
+            position: relative;
+        }
+
+        .timeline-item span {
+            font-size: 0.8em;
+            text-align: center;
+        }
+
+        .gantt-chart {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .gantt-row {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .gantt-task {
+            width: 150px;
+            font-weight: bold;
+            margin-right: 20px;
+        }
+
+        .gantt-bar {
+            height: 20px;
+            background: #e60023;
+            border-radius: 10px;
+            margin-right: 10px;
+        }
+
+        .risk-matrix {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .risk-item {
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .risk-high { background: #e74c3c; }
+        .risk-medium { background: #f39c12; }
+        .risk-low { background: #27ae60; }
+
+        .stakeholder-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stakeholder-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            padding: 15px 30px;
+            border-radius: 50px;
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .controls button {
+            background: #e60023;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .controls button:hover {
+            background: #c4001d;
+            transform: translateY(-2px);
+        }
+
+        .controls button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .slide-counter {
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lessons-learned {
+            background: #f8f9fa;
+            border-left: 5px solid #e60023;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .success-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .success-card {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .bullet-point {
+            margin: 10px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .bullet-point::before {
+            content: '•';
+            color: #e60023;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px;
+            }
+            
+            .project-overview {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .timeline::before {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <div class="pinterest-logo">Pinterest</div>
+            <h1>Pinterest Shopping Features Enhancement</h1>
+            <div style="text-align: center; margin-top: 40px;">
+                <h3>Project Management Case Study</h3>
+                <p style="font-size: 1.2em; color: #666; margin-top: 20px;">A comprehensive analysis of implementing enhanced shopping features to drive user engagement and revenue growth</p>
+                <div style="margin-top: 40px; font-size: 1.1em; color: #333;">
+                    <p><strong>Project Manager:</strong> [Your Name]</p>
+                    <p><strong>Duration:</strong> 6 months</p>
+                    <p><strong>Team Size:</strong> 15 members</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Executive Summary -->
+        <div class="slide">
+            <h2>Executive Summary</h2>
+            <div class="project-overview">
+                <div>
+                    <h3>Project Objective</h3>
+                    <p>Enhance Pinterest's shopping experience by implementing advanced product discovery features, streamlined checkout process, and personalized shopping recommendations to increase user engagement and drive revenue growth.</p>
+                    
+                    <h3 style="margin-top: 30px;">Key Deliverables</h3>
+                    <div class="bullet-point">Visual Search 2.0 with AI-powered product matching</div>
+                    <div class="bullet-point">One-click checkout integration</div>
+                    <div class="bullet-point">Personalized shopping feed algorithm</div>
+                    <div class="bullet-point">Merchant dashboard enhancements</div>
+                </div>
+                <div>
+                    <div class="metric-card">
+                        <h3>$50M</h3>
+                        <p>Projected Annual Revenue Impact</p>
+                    </div>
+                    <div class="metric-card" style="margin-top: 20px;">
+                        <h3>25%</h3>
+                        <p>Expected Increase in Shopping Engagement</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Project Scope & Objectives -->
+        <div class="slide">
+            <h2>Project Scope & Objectives</h2>
+            
+            <h3>Primary Objectives</h3>
+            <div class="bullet-point">Increase shopping-related user engagement by 25%</div>
+            <div class="bullet-point">Improve conversion rate from Pin to purchase by 15%</div>
+            <div class="bullet-point">Enhance merchant satisfaction scores by 20%</div>
+            <div class="bullet-point">Reduce shopping cart abandonment by 30%</div>
+            
+            <h3 style="margin-top: 30px;">Scope Inclusions</h3>
+            <div class="bullet-point">Mobile and web platform enhancements</div>
+            <div class="bullet-point">Integration with major e-commerce platforms</div>
+            <div class="bullet-point">A/B testing framework implementation</div>
+            <div class="bullet-point">Analytics and reporting dashboard</div>
+            
+            <h3 style="margin-top: 30px;">Scope Exclusions</h3>
+            <div class="bullet-point">Complete redesign of existing Pinterest interface</div>
+            <div class="bullet-point">International market expansion (Phase 2)</div>
+            <div class="bullet-point">Third-party payment processor development</div>
+        </div>
+
+        <!-- Slide 4: Timeline & Milestones -->
+        <div class="slide">
+            <h2>Project Timeline & Key Milestones</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span>Week 1-4<br>Discovery</span>
+                </div>
+                <div class="timeline-item">
+                    <span>Week 5-12<br>Design</span>
+                </div>
+                <div class="timeline-item">
+                    <span>Week 13-20<br>Development</span>
+                </div>
+                <div class="timeline-item">
+                    <span>Week 21-24<br>Testing</span>
+                </div>
+                <div class="timeline-item">
+                    <span>Week 25-26<br>Launch</span>
+                </div>
+            </div>
+            
+            <div class="gantt-chart">
+                <h3>Detailed Project Schedule</h3>
+                <div class="gantt-row">
+                    <div class="gantt-task">User Research</div>
+                    <div class="gantt-bar" style="width: 15%;"></div>
+                    <span>Weeks 1-4</span>
+                </div>
+                <div class="gantt-row">
+                    <div class="gantt-task">UI/UX Design</div>
+                    <div class="gantt-bar" style="width: 30%;"></div>
+                    <span>Weeks 5-12</span>
+                </div>
+                <div class="gantt-row">
+                    <div class="gantt-task">Backend Development</div>
+                    <div class="gantt-bar" style="width: 35%;"></div>
+                    <span>Weeks 10-20</span>
+                </div>
+                <div class="gantt-row">
+                    <div class="gantt-task">Frontend Development</div>
+                    <div class="gantt-bar" style="width: 30%;"></div>
+                    <span>Weeks 13-20</span>
+                </div>
+                <div class="gantt-row">
+                    <div class="gantt-task">QA Testing</div>
+                    <div class="gantt-bar" style="width: 20%;"></div>
+                    <span>Weeks 18-24</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Team Structure -->
+        <div class="slide">
+            <h2>Project Team Structure</h2>
+            
+            <div class="stakeholder-grid">
+                <div class="stakeholder-card">
+                    <h3>Product Team</h3>
+                    <p><strong>Product Manager</strong><br>Sarah Chen</p>
+                    <p><strong>UX Designer</strong><br>Marcus Rodriguez</p>
+                    <p><strong>UI Designer</strong><br>Emily Zhang</p>
+                </div>
+                
+                <div class="stakeholder-card">
+                    <h3>Engineering Team</h3>
+                    <p><strong>Tech Lead</strong><br>James Wilson</p>
+                    <p><strong>Backend Engineers</strong><br>3 developers</p>
+                    <p><strong>Frontend Engineers</strong><br>3 developers</p>
+                </div>
+                
+                <div class="stakeholder-card">
+                    <h3>Data & Analytics</h3>
+                    <p><strong>Data Scientist</strong><br>Dr. Priya Patel</p>
+                    <p><strong>Analytics Engineer</strong><br>Alex Thompson</p>
+                </div>
+                
+                <div class="stakeholder-card">
+                    <h3>Quality & Operations</h3>
+                    <p><strong>QA Lead</strong><br>Michael Brown</p>
+                    <p><strong>DevOps Engineer</strong><br>Lisa Kim</p>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 30px;">Key Stakeholders</h3>
+            <div class="bullet-point"><strong>Executive Sponsor:</strong> VP of Product - Jennifer Martinez</div>
+            <div class="bullet-point"><strong>Business Owner:</strong> Director of Shopping - David Lee</div>
+            <div class="bullet-point"><strong>Technical Architect:</strong> Principal Engineer - Robert Johnson</div>
+        </div>
+
+        <!-- Slide 6: Risk Management -->
+        <div class="slide">
+            <h2>Risk Assessment & Mitigation</h2>
+            
+            <div class="risk-matrix">
+                <div class="risk-item risk-high">
+                    <h3>HIGH RISK</h3>
+                    <p>Third-party API Integration Delays</p>
+                    <small>Mitigation: Early integration testing, backup vendors</small>
+                </div>
+                <div class="risk-item risk-medium">
+                    <h3>MEDIUM RISK</h3>
+                    <p>User Adoption Resistance</p>
+                    <small>Mitigation: Gradual rollout, user education</small>
+                </div>
+                <div class="risk-item risk-low">
+                    <h3>LOW RISK</h3>
+                    <p>Minor UI/UX Adjustments</p>
+                    <small>Mitigation: Continuous user feedback</small>
+                </div>
+            </div>
+            
+            <h3>Risk Mitigation Strategies</h3>
+            <div class="bullet-point"><strong>Technical Risks:</strong> Implement robust testing frameworks, maintain fallback systems, conduct regular code reviews</div>
+            <div class="bullet-point"><strong>Timeline Risks:</strong> Build buffer time into critical path, maintain agile sprint methodology</div>
+            <div class="bullet-point"><strong>Resource Risks:</strong> Cross-train team members, maintain vendor relationships for additional support</div>
+            <div class="bullet-point"><strong>Market Risks:</strong> Continuous competitive analysis, flexible feature prioritization</div>
+        </div>
+
+        <!-- Slide 7: Budget & Resources -->
+        <div class="slide">
+            <h2>Budget & Resource Allocation</h2>
+            
+            <div class="success-metrics">
+                <div class="success-card">
+                    <h3>$2.5M</h3>
+                    <p>Total Project Budget</p>
+                </div>
+                <div class="success-card">
+                    <h3>15</h3>
+                    <p>Team Members</p>
+                </div>
+                <div class="success-card">
+                    <h3>26</h3>
+                    <p>Project Weeks</p>
+                </div>
+            </div>
+            
+            <h3>Budget Breakdown</h3>
+            <div class="gantt-chart">
+                <div class="gantt-row">
+                    <div class="gantt-task">Personnel Costs</div>
+                    <div class="gantt-bar" style="width: 60%; background: #27ae60;"></div>
+                    <span>$1.5M (60%)</span>
+                </div>
+                <div class="gantt-row">
+                    <div class="gantt-task">Technology & Tools</div>
+                    <div class="gantt-bar" style="width: 20%; background: #f39c12;"></div>
+                    <span>$500K (20%)</span>
+                </div>
+                <div class="gantt-row">
+                    <div class="gantt-task">Third-party Services</div>
+                    <div class="gantt-bar" style="width: 12%; background: #3498db;"></div>
+                    <span>$300K (12%)</span>
+                </div>
+                <div class="gantt-row">
+                    <div class="gantt-task">Contingency</div>
+                    <div class="gantt-bar" style="width: 8%; background: #e74c3c;"></div>
+                    <span>$200K (8%)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Success Metrics -->
+        <div class="slide">
+            <h2>Success Metrics & KPIs</h2>
+            
+            <div class="project-overview">
+                <div>
+                    <h3>User Engagement Metrics</h3>
+                    <div class="bullet-point">Shopping Pin saves: +25% increase</div>
+                    <div class="bullet-point">Product page views: +30% increase</div>
+                    <div class="bullet-point">Shopping session duration: +20% increase</div>
+                    <div class="bullet-point">User retention rate: +15% improvement</div>
+                    
+                    <h3 style="margin-top: 30px;">Business Metrics</h3>
+                    <div class="bullet-point">Conversion rate: 15% improvement</div>
+                    <div class="bullet-point">Average order value: $45 → $52</div>
+                    <div class="bullet-point">Cart abandonment: -30% reduction</div>
+                </div>
+                <div>
+                    <h3>Technical Performance</h3>
+                    <div class="bullet-point">Page load time: <2 seconds</div>
+                    <div class="bullet-point">API response time: <500ms</div>
+                    <div class="bullet-point">System uptime: 99.9%</div>
+                    <div class="bullet-point">Error rate: <0.1%</div>
+                    
+                    <h3 style="margin-top: 30px;">Merchant Satisfaction</h3>
+                    <div class="bullet-point">Dashboard usability score: 4.5/5</div>
+                    <div class="bullet-point">Support ticket reduction: -40%</div>
+                    <div class="bullet-point">Merchant NPS: +20 points</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Challenges & Solutions -->
+        <div class="slide">
+            <h2>Key Challenges & Solutions</h2>
+            
+            <div class="lessons-learned">
+                <h3>Challenge 1: API Integration Complexity</h3>
+                <p><strong>Issue:</strong> Multiple e-commerce platforms with varying API standards caused integration delays.</p>
+                <p><strong>Solution:</strong> Developed a unified API wrapper service and implemented parallel integration testing.</p>
+                <p><strong>Result:</strong> Reduced integration time by 3 weeks and improved system reliability.</p>
+            </div>
+            
+            <div class="lessons-learned">
+                <h3>Challenge 2: User Experience Consistency</h3>
+                <p><strong>Issue:</strong> Maintaining consistent shopping experience across mobile and web platforms.</p>
+                <p><strong>Solution:</strong> Implemented design system with shared components and extensive cross-platform testing.</p>
+                <p><strong>Result:</strong> Achieved 98% UI consistency score across platforms.</p>
+            </div>
+            
+            <div class="lessons-learned">
+                <h3>Challenge 3: Performance Optimization</h3>
+                <p><strong>Issue:</strong> Shopping features caused 20% increase in page load times during testing.</p>
+                <p><strong>Solution:</strong> Implemented lazy loading, image optimization, and CDN caching strategies.</p>
+                <p><strong>Result:</strong> Improved performance by 35% compared to baseline.</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Results & Impact -->
+        <div class="slide">
+            <h2>Project Results & Business Impact</h2>
+            
+            <div class="success-metrics">
+                <div class="success-card">
+                    <h3>28%</h3>
+                    <p>Increase in Shopping Engagement</p>
+                </div>
+                <div class="success-card">
+                    <h3>18%</h3>
+                    <p>Conversion Rate Improvement</p>
+                </div>
+                <div class="success-card">
+                    <h3>$12M</h3>
+                    <p>Additional Quarterly Revenue</p>
+                </div>
+                <div class="success-card">
+                    <h3>35%</h3>
+                    <p>Reduction in Cart Abandonment</p>
+                </div>
+            </div>
+            
+            <h3>Post-Launch Performance (90 days)</h3>
+            <div class="bullet-point">Successfully launched to 100% of users with zero critical issues</div>
+            <div class="bullet-point">Exceeded all primary KPIs within first month</div>
+            <div class="bullet-point">Received 4.7/5 user satisfaction rating</div>
+            <div class="bullet-point">Generated positive ROI of 480% in first quarter</div>
+            <div class="bullet-point">Merchant adoption rate of 73% within 60 days</div>
+        </div>
+
+        <!-- Slide 11: Lessons Learned -->
+        <div class="slide">
+            <h2>Lessons Learned & Best Practices</h2>
+            
+            <h3>What Worked Well</h3>
+            <div class="bullet-point"><strong>Agile Methodology:</strong> 2-week sprints with daily standups enabled rapid iteration and problem-solving</div>
+            <div class="bullet-point"><strong>Cross-functional Collaboration:</strong> Weekly stakeholder meetings ensured alignment and quick decision-making</div>
+            <div class="bullet-point"><strong>User-Centric Approach:</strong> Continuous user testing and feedback integration throughout development</div>
+            <div class="bullet-point"><strong>Risk Mitigation:</strong> Proactive risk identification and mitigation strategies prevented major delays</div>
+            
+            <h3 style="margin-top: 30px;">Areas for Improvement</h3>
+            <div class="bullet-point"><strong>Earlier Technical Discovery:</strong> More thorough technical assessment could have identified API challenges sooner</div>
+            <div class="bullet-point"><strong>Stakeholder Communication:</strong> More frequent updates to executive leadership needed during critical phases</div>
+            <div class="bullet-point"><strong>Documentation:</strong> Better technical documentation would have accelerated onboarding new team members</div>
+            
+            <h3 style="margin-top: 30px;">Recommendations for Future Projects</h3>
+            <div class="bullet-point">Implement automated testing earlier in the development cycle</div>
+            <div class="bullet-point">Establish clear success criteria and exit criteria for each project phase</div>
+            <div class="bullet-point">Create dedicated communication channels for different stakeholder groups</div>
+        </div>
+
+        <!-- Slide 12: Next Steps -->
+        <div class="slide">
+            <h2>Next Steps & Future Roadmap</h2>
+            
+            <h3>Phase 2 Initiatives (Q2 2025)</h3>
+            <div class="bullet-point">International market expansion (EU, APAC)</div>
+            <div class="bullet-point">AI-powered visual search enhancements</div>
+            <div class="bullet-point">Social shopping features integration</div>
+            <div class="bullet-point">Advanced analytics and merchant insights</div>
+            
+            <h3 style="margin-top: 30px;">Continuous Improvement</h3>
+            <div class="bullet-point">Monthly performance reviews and optimization</div>
+            <div class="bullet-point">Quarterly user satisfaction surveys</div>
+            <div class="bullet-point">Ongoing A/B testing for feature refinements</div>
+            <div class="bullet-point">Regular competitive analysis and market research</div>
+            
+            <div class="lessons-learned">
+                <h3>Key Takeaways</h3>
+                <p>This project demonstrated the importance of thorough planning, cross-functional collaboration, and user-centric design in delivering successful product enhancements. The methodical approach to risk management and stakeholder communication was crucial for meeting aggressive timelines while maintaining quality standards.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button id="prevBtn" onclick="changeSlide(-1)">Previous</button>
+        <div class="slide-counter">
+            <span id="slideNumber">1</span> / <span id="totalSlides">12</span>
+        </div>
+        <button id="nextBtn" onclick="changeSlide(1)">Next</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('slideNumber').textContent = currentSlide + 1;
+            
+            // Update button states
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                changeSlide(1);
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                changeSlide(-1);
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>
